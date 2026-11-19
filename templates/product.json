@@ -1,0 +1,94 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "eyebrow": {
+          "type": "eyebrow",
+          "settings": {
+            "text": "FitFoxx Athletics"
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {}
+        },
+        "size_guide": {
+          "type": "size_guide",
+          "settings": {}
+        },
+        "quantity": {
+          "type": "quantity",
+          "settings": {}
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "reassurance": "Free shipping over $75 \u00b7 Free 30-day returns"
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {}
+        },
+        "tab_details": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Details & materials",
+            "icon": "feather",
+            "content": "<ul><li>Lightweight four-way stretch fabric</li><li>Sweat-wicking and quick-dry</li><li>Flatlock seams to reduce chafing</li><li>Machine wash cold, hang dry</li></ul>",
+            "open": true
+          }
+        },
+        "tab_shipping": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Shipping & returns",
+            "icon": "truck",
+            "content": "<p>Free standard shipping on orders over $75. Orders ship within 1\u20132 business days.</p><p>Free returns and exchanges within 30 days on unworn items with tags attached.</p>",
+            "open": false
+          }
+        }
+      },
+      "block_order": [
+        "eyebrow",
+        "title",
+        "price",
+        "variant_picker",
+        "size_guide",
+        "quantity",
+        "buy_buttons",
+        "description",
+        "tab_details",
+        "tab_shipping"
+      ],
+      "settings": {
+        "gallery_layout": "editorial",
+        "enable_zoom": true,
+        "sticky_atc": true,
+        "show_size_guide": true
+      }
+    },
+    "related": {
+      "type": "product-recommendations",
+      "settings": {
+        "eyebrow": "Complete the kit",
+        "heading": "You may also like",
+        "limit": 4
+      }
+    }
+  },
+  "order": [
+    "main",
+    "related"
+  ]
+}

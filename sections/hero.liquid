@@ -1,0 +1,96 @@
+{%- liquid
+  assign s = section.settings
+  assign img = s.image
+  assign img_mobile = s.image_mobile | default: s.image
+  assign hero_alt = img.alt | default: s.heading | strip_html
+-%}
+<section class="hero hero--{{ s.height }} hero--{{ s.content_position }}" style="--overlay: {{ s.overlay_opacity | divided_by: 100.0 }}" {{ section.shopify_attributes }}>
+  <div class="hero__media">
+    {%- if img != blank -%}
+      <picture>
+        {%- if s.image_mobile != blank -%}
+          <source media="(max-width: 749px)" srcset="{{ img_mobile | image_url: width: 750 }} 750w, {{ img_mobile | image_url: width: 1100 }} 1100w" sizes="100vw">
+        {%- endif -%}
+        {{ img | image_url: width: 2400 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '100vw', widths: '750, 1100, 1500, 1800, 2400', class: 'hero__img', alt: hero_alt }}
+      </picture>
+    {%- else -%}
+      {%- if settings.use_sample_images -%}
+        {%- render 'default-image', name: 'foxx-hero.jpg', width: 2200, height: 1300, mobile: 'foxx-hero-mobile.jpg', class: 'hero__img', alt: 'Athlete training in a dark gym', loading: 'eager' -%}
+      {%- else -%}
+        {%- render 'placeholder', label: 'Hero image', class: 'hero__placeholder' -%}
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+
+  {%- if s.show_grid -%}
+    <div class="hero__grid" aria-hidden="true"><span></span><span></span><span></span></div>
+  {%- endif -%}
+
+  <div class="hero__content page-width">
+    <div class="hero__copy">
+      {%- if s.eyebrow != blank -%}
+        <p class="eyebrow hero__eyebrow"><span class="eyebrow__dot"></span>{{ s.eyebrow }}</p>
+      {%- endif -%}
+      {%- if s.heading != blank -%}
+        <h1 class="hero__heading display">{{ s.heading }}</h1>
+      {%- endif -%}
+      <div class="hero__foot">
+        {%- if s.text != blank -%}<div class="hero__text">{{ s.text }}</div>{%- endif -%}
+        {%- if s.button_label != blank or s.button_label_2 != blank -%}
+          <div class="hero__buttons">
+            {%- if s.button_label != blank -%}
+              <a href="{{ s.button_link | default: routes.all_products_collection_url }}" class="btn btn--primary btn--lg">{{ s.button_label }} {% render 'icon', icon: 'arrow' %}</a>
+            {%- endif -%}
+            {%- if s.button_label_2 != blank -%}
+              <a href="{{ s.button_link_2 | default: routes.collections_url }}" class="btn btn--ghost btn--lg">{{ s.button_label_2 }}</a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+    {%- if s.side_label != blank -%}
+      <p class="hero__side" aria-hidden="true">{{ s.side_label }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "class": "section-hero",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image", "info": "2400 x 1400 px recommended" },
+    { "type": "image_picker", "id": "image_mobile", "label": "Mobile image", "info": "Optional. 1100 x 1600 px portrait recommended" },
+    { "type": "range", "id": "overlay_opacity", "label": "Image darkening", "min": 0, "max": 90, "step": 5, "unit": "%", "default": 40 },
+    {
+      "type": "select", "id": "height", "label": "Height",
+      "options": [
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "full", "label": "Full screen" }
+      ],
+      "default": "full"
+    },
+    {
+      "type": "select", "id": "content_position", "label": "Content position",
+      "options": [
+        { "value": "bottom-left", "label": "Bottom left" },
+        { "value": "center-left", "label": "Middle left" },
+        { "value": "bottom-right", "label": "Bottom right" }
+      ],
+      "default": "bottom-left"
+    },
+    { "type": "checkbox", "id": "show_grid", "label": "Show geometric grid lines", "default": true },
+    { "type": "header", "content": "Content" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "New season / Apex Series" },
+    { "type": "inline_richtext", "id": "heading", "label": "Headline", "info": "Italic text is shown as outlined lettering.", "default": "Unleash your <em>strength</em>" },
+    { "type": "richtext", "id": "text", "label": "Supporting text", "default": "<p>Engineered performance wear for heavy lifts, hard miles and everything between. Built to move. Made to last.</p>" },
+    { "type": "text", "id": "button_label", "label": "Primary button label", "default": "Shop now" },
+    { "type": "url", "id": "button_link", "label": "Primary button link", "info": "Defaults to all products" },
+    { "type": "text", "id": "button_label_2", "label": "Secondary button label", "default": "Explore collections" },
+    { "type": "url", "id": "button_link_2", "label": "Secondary button link", "info": "Defaults to all collections" },
+    { "type": "text", "id": "side_label", "label": "Vertical side label", "default": "FitFoxx Athletics — Est. Performance" }
+  ],
+  "presets": [{ "name": "Hero" }]
+}
+{% endschema %}

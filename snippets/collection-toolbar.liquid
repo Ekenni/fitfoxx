@@ -1,0 +1,57 @@
+{%- comment -%} Toolbar + active filter chips. Accepts: results, form_id, count (number), clear_url (string), show_sort, show_filter (booleans, optional) {%- endcomment -%}
+{%- assign sort_by = results.sort_by | default: results.default_sort_by -%}
+<div class="toolbar">
+  {%- if show_filter != false and results.filters.size > 0 -%}
+    <button type="button" class="toolbar__filter" data-facets-open aria-controls="{{ form_id }}">
+      {%- render 'icon', icon: 'filter' -%} {{ 'collections.filters.title' | t }}
+    </button>
+  {%- endif -%}
+  <p class="toolbar__count">{{ 'collections.general.product_count' | t: count: count }}</p>
+  {%- if show_sort != false and results.sort_options.size > 0 -%}
+    <div class="toolbar__sort">
+      <label for="SortBy-{{ form_id }}" class="toolbar__label">{{ 'collections.sorting.title' | t }}</label>
+      <div class="select">
+        <select id="SortBy-{{ form_id }}" class="select__input" data-sort-select data-form="{{ form_id }}">
+          {%- for option in results.sort_options -%}
+            <option value="{{ option.value | escape }}"{% if option.value == sort_by %} selected{% endif %}>{{ option.name }}</option>
+          {%- endfor -%}
+        </select>
+        {%- render 'icon', icon: 'chevron' -%}
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+
+{%- liquid
+  assign has_active = false
+  for filter in results.filters
+    if filter.active_values.size > 0
+      assign has_active = true
+    endif
+    if filter.type == 'price_range'
+      if filter.min_value.value != nil or filter.max_value.value != nil
+        assign has_active = true
+      endif
+    endif
+  endfor
+-%}
+{%- if has_active -%}
+  <div class="active-filters">
+    {%- for filter in results.filters -%}
+      {%- for value in filter.active_values -%}
+        <a href="{{ value.url_to_remove }}" class="chip">{{ filter.label }}: {{ value.label }} {% render 'icon', icon: 'close' %}</a>
+      {%- endfor -%}
+      {%- if filter.type == 'price_range' -%}
+        {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+          <a href="{{ filter.url_to_remove }}" class="chip">
+            {%- if filter.min_value.value -%}{{ filter.min_value.value | money }}{%- else -%}{{ 0 | money }}{%- endif -%}
+            &ndash;
+            {%- if filter.max_value.value -%}{{ filter.max_value.value | money }}{%- else -%}{{ filter.range_max | money }}{%- endif %}
+            {% render 'icon', icon: 'close' %}
+          </a>
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+    <a href="{{ clear_url }}" class="active-filters__clear">{{ 'collections.filters.clear_all' | t }}</a>
+  </div>
+{%- endif -%}

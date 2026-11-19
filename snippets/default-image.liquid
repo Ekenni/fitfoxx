@@ -1,0 +1,9 @@
+{%- comment -%} Bundled FOXX sample photo, used until a merchant uploads an image. Accepts: name, width, height, class, alt, loading, mobile (optional asset name) {%- endcomment -%}
+{%- if mobile != blank -%}
+  <picture>
+    <source media="(max-width: 749px)" srcset="{{ mobile | asset_url }}">
+    <img src="{{ name | asset_url }}" class="{{ class }}" alt="{{ alt | escape }}" width="{{ width | default: 1200 }}" height="{{ height | default: 1600 }}" loading="{{ loading | default: 'lazy' }}" decoding="async">
+  </picture>
+{%- else -%}
+  <img src="{{ name | asset_url }}" class="{{ class }}" alt="{{ alt | escape }}" width="{{ width | default: 1200 }}" height="{{ height | default: 1600 }}" loading="{{ loading | default: 'lazy' }}" decoding="async">
+{%- endif -%}

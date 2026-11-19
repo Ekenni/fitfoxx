@@ -1,0 +1,36 @@
+{% layout none %}
+{%- assign initial_value = gift_card.initial_value | money -%}
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{{ 'gift_cards.issued.title' | t: value: initial_value }} &ndash; {{ shop.name }}</title>
+    {% render 'theme-styles' %}
+    {{ 'theme.css' | asset_url | stylesheet_tag }}
+    {{ content_for_header }}
+  </head>
+  <body class="template-gift-card">
+    <main class="section gift-card">
+      <div class="page-width account-page__narrow">
+        <div class="gift-card__logo">{%- render 'logo-full', class: 'gift-card__logo-img', loading: 'eager' -%}</div>
+        <p class="eyebrow">{{ 'gift_cards.issued.subtext' | t }}</p>
+        <h1 class="display">{{ gift_card.balance | money }}</h1>
+        {%- if gift_card.balance != gift_card.initial_value -%}
+          <p>{{ 'gift_cards.issued.initial_value' | t: value: initial_value }}</p>
+        {%- endif -%}
+        {%- if gift_card.expired or gift_card.enabled == false -%}
+          <p class="form-message form-message--error">{{ 'gift_cards.issued.expired' | t }}</p>
+        {%- endif -%}
+        <div class="promo-code">
+          <span class="promo-code__label">{{ 'gift_cards.issued.code' | t }}</span>
+          <code class="promo-code__value">{{ gift_card.code | format_code }}</code>
+        </div>
+        <a href="{{ shop.url }}" class="btn btn--primary btn--lg">{{ 'gift_cards.issued.shop_link' | t }}</a>
+        {%- if gift_card.pass_url -%}
+          <a href="{{ gift_card.pass_url }}" class="gift-card__wallet"><img src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}" width="120" height="40" alt="{{ 'gift_cards.issued.add_to_apple_wallet' | t }}" loading="lazy"></a>
+        {%- endif -%}
+      </div>
+    </main>
+  </body>
+</html>

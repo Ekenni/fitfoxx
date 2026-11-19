@@ -1,0 +1,50 @@
+<article class="section article" {{ section.shopify_attributes }}>
+  <div class="page-width article__inner">
+    <a href="{{ blog.url }}" class="link-arrow article__back">{% render 'icon', icon: 'arrow', class: 'icon--flip' %} {{ blog.title }}</a>
+    <p class="eyebrow">{{ article.published_at | time_tag: format: 'date' }}{% if article.author %} — {{ article.author }}{% endif %}</p>
+    <h1 class="display article__title">{{ article.title }}</h1>
+    {%- if article.image -%}
+      <div class="article__media">
+        {{ article.image | image_url: width: 2000 | image_tag: loading: 'eager', sizes: '100vw', widths: '750, 1100, 1500, 2000', alt: article.title }}
+      </div>
+    {%- endif -%}
+    <div class="rte article__body">{{ article.content }}</div>
+
+    {%- if blog.comments_enabled? -%}
+      <div class="article__comments">
+        {%- if article.comments_count > 0 -%}
+          <h2 class="h3">{{ 'blogs.comments.count' | t: count: article.comments_count }}</h2>
+          {%- paginate article.comments by 20 -%}
+            <ul class="comments" role="list">
+              {%- for comment in article.comments -%}
+                <li class="comment"><div class="rte">{{ comment.content }}</div><p class="comment__meta">{{ comment.author }} — {{ comment.created_at | time_tag: format: 'date' }}</p></li>
+              {%- endfor -%}
+            </ul>
+            {%- render 'pagination', paginate: paginate -%}
+          {%- endpaginate -%}
+        {%- endif -%}
+        {%- form 'new_comment', article, class: 'form' -%}
+          <h2 class="h3">{{ 'blogs.comments.title' | t }}</h2>
+          {%- if form.posted_successfully? -%}
+            <p class="form-message form-message--success">{% if blog.moderated? %}{{ 'blogs.comments.success_moderated' | t }}{% else %}{{ 'blogs.comments.success' | t }}{% endif %}</p>
+          {%- endif -%}
+          {%- if form.errors -%}<div class="form-message form-message--error">{{ form.errors | default_errors }}</div>{%- endif -%}
+          <div class="form__row">
+            <label class="field"><span class="field__label">{{ 'templates.contact.form.name' | t }}</span><input class="field__input" type="text" name="comment[author]" value="{{ form.author }}" required></label>
+            <label class="field"><span class="field__label">{{ 'templates.contact.form.email' | t }}</span><input class="field__input" type="email" name="comment[email]" value="{{ form.email }}" required></label>
+          </div>
+          <label class="field"><span class="field__label">{{ 'blogs.comments.message' | t }}</span><textarea class="field__input" name="comment[body]" rows="5" required>{{ form.body }}</textarea></label>
+          <button type="submit" class="btn btn--primary">{{ 'blogs.comments.post' | t }}</button>
+        {%- endform -%}
+      </div>
+    {%- endif -%}
+  </div>
+</article>
+
+{% schema %}
+{
+  "name": "Blog post",
+  "class": "section-main-article",
+  "settings": []
+}
+{% endschema %}

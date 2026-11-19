@@ -1,0 +1,46 @@
+{%- comment -%}
+  Accepts: product (product), index (number, optional), sizes (string, optional)
+{%- endcomment -%}
+{%- liquid
+  assign sizes = sizes | default: '(min-width: 990px) 25vw, 50vw'
+  assign loading = 'lazy'
+  if index and index < 2
+    assign loading = 'eager'
+  endif
+  assign color_count = 0
+  for option in product.options_with_values
+    assign opt_name = option.name | downcase
+    if opt_name == 'color' or opt_name == 'colour'
+      assign color_count = option.values.size
+    endif
+  endfor
+  assign card_alt = product.featured_media.alt | default: product.title
+  assign secondary = nil
+  if settings.card_show_secondary_image and product.media.size > 1
+    assign secondary = product.media[1]
+  endif
+-%}
+<article class="card reveal" data-product-card>
+  <a href="{{ product.url }}" class="card__media ratio ratio--{{ settings.card_image_ratio }}{% if secondary %} card__media--has-hover{% endif %}" aria-label="{{ product.title | escape }}" tabindex="-1">
+    {%- if product.featured_media -%}
+      {{ product.featured_media | image_url: width: 900 | image_tag: loading: loading, sizes: sizes, widths: '300, 450, 600, 750, 900', class: 'card__img card__img--primary', alt: card_alt }}
+      {%- if secondary -%}
+        {{ secondary | image_url: width: 900 | image_tag: loading: 'lazy', sizes: sizes, widths: '300, 450, 600, 750, 900', class: 'card__img card__img--secondary', alt: '' }}
+      {%- endif -%}
+    {%- else -%}
+      {%- render 'placeholder' -%}
+    {%- endif -%}
+    {%- render 'badges', product: product, class: 'card__badges' -%}
+    <span class="card__cta" aria-hidden="true">{{ 'products.product.view' | t }} {% render 'icon', icon: 'arrow-up-right' %}</span>
+  </a>
+  <div class="card__info">
+    <div class="card__text">
+      {%- if settings.card_show_vendor -%}<p class="card__vendor">{{ product.vendor }}</p>{%- endif -%}
+      <h3 class="card__title"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+      {%- if settings.card_show_color_count and color_count > 1 -%}
+        <p class="card__meta">{{ 'products.product.color_count' | t: count: color_count }}</p>
+      {%- endif -%}
+    </div>
+    {%- render 'price', product: product, class: 'card__price' -%}
+  </div>
+</article>

@@ -1,0 +1,31 @@
+{%- assign limit = section.settings.limit -%}
+<section class="section related" data-recommendations data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ limit }}&intent=related" {{ section.shopify_attributes }}>
+  {%- if recommendations.performed? and recommendations.products_count > 0 -%}
+    <div class="page-width">
+      <div class="section-head">
+        <div>
+          {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+          <h2 class="h1 section-head__title">{{ section.settings.heading }}</h2>
+        </div>
+      </div>
+      <div class="product-grid product-grid--scroll-mobile" style="--cols: 4">
+        {%- for product in recommendations.products -%}
+          {%- render 'product-card', product: product, index: 4 -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Related products",
+  "class": "section-related",
+  "settings": [
+    { "type": "paragraph", "content": "Recommendations are generated automatically by Shopify, or manually with the Search & Discovery app." },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Complete the kit" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "You may also like" },
+    { "type": "range", "id": "limit", "label": "Products to show", "min": 2, "max": 8, "step": 1, "default": 4 }
+  ]
+}
+{% endschema %}

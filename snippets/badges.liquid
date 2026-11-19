@@ -1,0 +1,35 @@
+{%- comment -%}
+  Product badges driven by product tags. Accepts: product (product), class (string, optional)
+{%- endcomment -%}
+{%- if settings.badges_enabled -%}
+  {%- liquid
+    assign new_tag = settings.badge_new_tag | strip | downcase
+    assign best_tag = settings.badge_bestseller_tag | strip | downcase
+    assign is_new = false
+    assign is_best = false
+    for tag in product.tags
+      assign t_tag = tag | strip | downcase
+      if new_tag != blank and t_tag == new_tag
+        assign is_new = true
+      endif
+      if best_tag != blank and t_tag == best_tag
+        assign is_best = true
+      endif
+    endfor
+    assign is_sale = false
+    if settings.badge_show_sale and product.compare_at_price > product.price
+      assign is_sale = true
+    endif
+  -%}
+  {%- if is_new or is_best or is_sale or product.available == false -%}
+    <div class="badges{% if class %} {{ class }}{% endif %}">
+      {%- if product.available == false -%}
+        <span class="badge badge--muted">{{ 'products.product.sold_out' | t }}</span>
+      {%- else -%}
+        {%- if is_new -%}<span class="badge badge--accent">{{ 'products.badges.new' | t }}</span>{%- endif -%}
+        {%- if is_best -%}<span class="badge badge--light">{{ 'products.badges.best_seller' | t }}</span>{%- endif -%}
+        {%- if is_sale -%}<span class="badge badge--outline">{{ 'products.badges.sale' | t }}</span>{%- endif -%}
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+{%- endif -%}

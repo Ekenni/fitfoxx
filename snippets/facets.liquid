@@ -1,0 +1,97 @@
+{%- comment -%}
+  Storefront filters + sorting form. Accepts: results (collection or search), url (string), form_id (string), terms (string, optional)
+  Filters are configured in Shopify Admin with the Search & Discovery app.
+{%- endcomment -%}
+<form id="{{ form_id }}" action="{{ url }}" method="get" class="facets" data-facets-form>
+  {%- if terms != blank -%}
+    <input type="hidden" name="q" value="{{ terms | escape }}">
+    <input type="hidden" name="options[prefix]" value="last">
+  {%- endif -%}
+  {%- if results.sort_by != blank -%}
+    <input type="hidden" name="sort_by" value="{{ results.sort_by }}" data-sort-mirror>
+  {%- endif -%}
+
+  <div class="facets__head">
+    <h2 class="facets__title">{{ 'collections.filters.title' | t }}</h2>
+    <button type="button" class="header__icon facets__close" data-facets-close>
+      {%- render 'icon', icon: 'close' -%}<span class="visually-hidden">{{ 'general.menu.close' | t }}</span>
+    </button>
+  </div>
+
+  <div class="facets__groups">
+    {%- for filter in results.filters -%}
+      {%- liquid
+        assign active_count = filter.active_values.size
+        if filter.type == 'price_range'
+          if filter.min_value.value != nil or filter.max_value.value != nil
+            assign active_count = 1
+          endif
+        endif
+      -%}
+      <details class="facet" {% if forloop.index <= 3 or active_count > 0 %}open{% endif %}>
+        <summary class="facet__summary">
+          <span>{{ filter.label }}{% if active_count > 0 %} <span class="facet__active">({{ active_count }})</span>{% endif %}</span>
+          {%- render 'icon', icon: 'chevron' -%}
+        </summary>
+        <div class="facet__body">
+          {%- case filter.type -%}
+            {%- when 'price_range' -%}
+              {%- liquid
+                assign max_price = filter.range_max | money_without_currency | replace: ',', ''
+                assign min_val = ''
+                assign max_val = ''
+                if filter.min_value.value
+                  assign min_val = filter.min_value.value | money_without_currency | replace: ',', ''
+                endif
+                if filter.max_value.value
+                  assign max_val = filter.max_value.value | money_without_currency | replace: ',', ''
+                endif
+              -%}
+              <div class="facet__price">
+                <label class="field">
+                  <span class="field__label">{{ 'collections.filters.from' | t }} ({{ cart.currency.symbol }})</span>
+                  <input class="field__input" type="number" inputmode="decimal" min="0" max="{{ max_price }}" step="1" name="{{ filter.min_value.param_name }}" value="{{ min_val }}" placeholder="0" data-price-input>
+                </label>
+                <label class="field">
+                  <span class="field__label">{{ 'collections.filters.to' | t }} ({{ cart.currency.symbol }})</span>
+                  <input class="field__input" type="number" inputmode="decimal" min="0" max="{{ max_price }}" step="1" name="{{ filter.max_value.param_name }}" value="{{ max_val }}" placeholder="{{ max_price }}" data-price-input>
+                </label>
+              </div>
+            {%- else -%}
+              <ul class="facet__list{% if filter.presentation == 'swatch' %} facet__list--swatch{% endif %}" role="list">
+                {%- for value in filter.values -%}
+                  {%- assign disabled = false -%}
+                  {%- if value.count == 0 and value.active == false -%}{%- assign disabled = true -%}{%- endif -%}
+                  <li>
+                    <label class="facet__check{% if disabled %} is-disabled{% endif %}">
+                      <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" {% if value.active %}checked{% endif %} {% if disabled %}disabled{% endif %}>
+                      {%- if filter.presentation == 'swatch' and value.swatch -%}
+                        {%- liquid
+                          if value.swatch.image
+                            assign sw_url = value.swatch.image | image_url: width: 40
+                            assign sw_style = 'background-image: url(' | append: sw_url | append: ')'
+                          else
+                            assign sw_style = 'background-color: ' | append: value.swatch.color
+                          endif
+                        -%}
+                        <span class="facet__chip" style="{{ sw_style }}"></span>
+                      {%- else -%}
+                        <span class="facet__box" aria-hidden="true">{% render 'icon', icon: 'check' %}</span>
+                      {%- endif -%}
+                      <span class="facet__label">{{ value.label }}</span>
+                      <span class="facet__count">{{ value.count }}</span>
+                    </label>
+                  </li>
+                {%- endfor -%}
+              </ul>
+          {%- endcase -%}
+        </div>
+      </details>
+    {%- endfor -%}
+  </div>
+
+  <div class="facets__foot">
+    <a href="{{ url }}{% if terms != blank %}?q={{ terms | url_encode }}{% endif %}" class="btn btn--outline">{{ 'collections.filters.clear_all' | t }}</a>
+    <button type="submit" class="btn btn--primary">{{ 'collections.filters.apply' | t }}</button>
+  </div>
+</form>

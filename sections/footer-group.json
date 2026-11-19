@@ -1,0 +1,60 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "eyebrow": "The Den",
+        "heading": "Join the pack",
+        "text": "<p>Early access to drops, training notes and members-only offers. No spam. Unsubscribe anytime.</p>",
+        "button_label": "Sign up",
+        "color_scheme": "light",
+        "fine_print": "By signing up you agree to receive marketing emails from FitFoxx Athletics."
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "menu-shop": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Shop",
+            "menu": "main-menu"
+          }
+        },
+        "menu-help": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Customer service",
+            "menu": "footer"
+          }
+        },
+        "text-contact": {
+          "type": "text",
+          "settings": {
+            "heading": "Contact",
+            "text": "<p>Questions about sizing, orders or returns? Our team replies within 24 hours.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "menu-shop",
+        "menu-help",
+        "text-contact"
+      ],
+      "settings": {
+        "brand_text": "<p>Performance apparel built for the ones who train when nobody's watching.</p>",
+        "show_social": true,
+        "show_wordmark": true,
+        "wordmark_text": "FOXX",
+        "copyright": "FitFoxx Athletics",
+        "show_payment_icons": true
+      }
+    }
+  },
+  "order": [
+    "newsletter",
+    "footer"
+  ]
+}

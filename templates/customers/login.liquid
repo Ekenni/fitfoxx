@@ -1,0 +1,37 @@
+<section class="section account-page">
+  <div class="page-width account-page__narrow">
+    <div id="RecoverPassword" class="account-page__panel" data-recover-panel hidden>
+      <p class="eyebrow">{{ 'customer.login.title' | t }}</p>
+      <h1 class="display account-page__title">{{ 'customer.recover.title' | t }}</h1>
+      <p>{{ 'customer.recover.subtext' | t }}</p>
+      {%- form 'recover_customer_password', class: 'form' -%}
+        {%- if form.posted_successfully? -%}<p class="form-message form-message--success">{{ 'customer.recover.success' | t }}</p>{%- endif -%}
+        {%- if form.errors -%}<div class="form-message form-message--error">{{ form.errors | default_errors }}</div>{%- endif -%}
+        <label class="field"><span class="field__label">{{ 'templates.contact.form.email' | t }}</span><input class="field__input" type="email" name="email" autocomplete="email" required></label>
+        <button type="submit" class="btn btn--primary btn--block">{{ 'customer.recover.submit' | t }}</button>
+        <a href="#login" class="link-arrow" data-recover-toggle>{{ 'customer.recover.cancel' | t }}</a>
+      {%- endform -%}
+    </div>
+
+    <div id="CustomerLogin" class="account-page__panel" data-login-panel>
+      <p class="eyebrow">{{ shop.name }}</p>
+      <h1 class="display account-page__title">{{ 'customer.login.title' | t }}</h1>
+      {%- form 'customer_login', class: 'form' -%}
+        {%- if form.errors -%}<div class="form-message form-message--error">{{ form.errors | default_errors }}</div>{%- endif -%}
+        <label class="field"><span class="field__label">{{ 'templates.contact.form.email' | t }}</span><input class="field__input" type="email" name="customer[email]" autocomplete="email" required></label>
+        {%- if form.password_needed -%}
+          <label class="field"><span class="field__label">{{ 'customer.login.password' | t }}</span><input class="field__input" type="password" name="customer[password]" autocomplete="current-password" required></label>
+          <a href="#recover" class="link-arrow" data-recover-toggle>{{ 'customer.login.forgot' | t }}</a>
+        {%- endif -%}
+        <button type="submit" class="btn btn--primary btn--block">{{ 'customer.login.submit' | t }}</button>
+        <a href="{{ routes.account_register_url }}" class="btn btn--outline btn--block">{{ 'customer.register.title' | t }}</a>
+      {%- endform -%}
+    </div>
+
+    {%- if shop.checkout.guest_login -%}
+      {%- form 'guest_login', class: 'form' -%}
+        <button type="submit" class="btn btn--ghost btn--block">{{ 'customer.login.guest' | t }}</button>
+      {%- endform -%}
+    {%- endif -%}
+  </div>
+</section>

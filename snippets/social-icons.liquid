@@ -1,0 +1,26 @@
+{%- comment -%} Social links from theme settings. Accepts: class (string, optional) {%- endcomment -%}
+{%- liquid
+  assign networks = 'instagram,tiktok,youtube,facebook,twitter,pinterest' | split: ','
+  assign has_any = false
+  for n in networks
+    assign key = 'social_' | append: n | append: '_link'
+    if settings[key] != blank
+      assign has_any = true
+    endif
+  endfor
+-%}
+{%- if has_any -%}
+  <ul class="social{% if class %} {{ class }}{% endif %}" role="list">
+    {%- for n in networks -%}
+      {%- assign key = 'social_' | append: n | append: '_link' -%}
+      {%- if settings[key] != blank -%}
+        <li>
+          <a href="{{ settings[key] }}" class="social__link" target="_blank" rel="noopener">
+            {%- render 'icon', icon: n -%}
+            <span class="visually-hidden">{{ n | capitalize }}</span>
+          </a>
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+{%- endif -%}

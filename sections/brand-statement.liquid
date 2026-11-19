@@ -1,0 +1,100 @@
+{%- assign s = section.settings -%}
+<section class="section statement statement--{{ s.color_scheme }}" {{ section.shopify_attributes }}>
+  {%- if s.show_mark -%}
+    {%- render 'icon-fox', class: 'statement__mark' -%}
+  {%- endif -%}
+  <div class="page-width statement__inner">
+    {%- if s.eyebrow != blank -%}<p class="eyebrow reveal">{{ s.eyebrow }}</p>{%- endif -%}
+    {%- if s.statement != blank -%}
+      <h2 class="statement__text display reveal">{{ s.statement }}</h2>
+    {%- endif -%}
+
+    <div class="statement__grid">
+      <div class="statement__media statement__media--a reveal">
+        {%- if s.image != blank -%}
+          {{ s.image | image_url: width: 1400 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 45vw, 100vw', widths: '500, 800, 1100, 1400', alt: s.image.alt }}
+        {%- else -%}
+          {%- if settings.use_sample_images -%}
+            {%- render 'default-image', name: 'foxx-statement-1.jpg', width: 1200, height: 1800, alt: 'Athlete in FitFoxx training wear' -%}
+          {%- else -%}
+            {%- render 'placeholder', label: 'Brand image' -%}
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+      <div class="statement__body reveal">
+        {%- if s.text != blank -%}<div class="statement__copy rte">{{ s.text }}</div>{%- endif -%}
+        {%- if section.blocks.size > 0 -%}
+          <dl class="stats">
+            {%- for block in section.blocks -%}
+              <div class="stats__item" {{ block.shopify_attributes }}>
+                <dt class="stats__value">{{ block.settings.value }}</dt>
+                <dd class="stats__label">{{ block.settings.label }}</dd>
+              </div>
+            {%- endfor -%}
+          </dl>
+        {%- endif -%}
+        {%- if s.button_label != blank -%}
+          <a href="{{ s.button_link | default: routes.all_products_collection_url }}" class="btn btn--outline">{{ s.button_label }} {% render 'icon', icon: 'arrow' %}</a>
+        {%- endif -%}
+      </div>
+      <div class="statement__media statement__media--b reveal">
+        {%- if s.image_2 != blank -%}
+          {{ s.image_2 | image_url: width: 1000 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 25vw, 60vw', widths: '400, 700, 1000', alt: s.image_2.alt }}
+        {%- else -%}
+          {%- if settings.use_sample_images -%}
+            {%- render 'default-image', name: 'foxx-statement-2.jpg', width: 900, height: 1350, alt: 'Gym equipment detail' -%}
+          {%- else -%}
+            {%- render 'placeholder', label: 'Detail image' -%}
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Brand statement",
+  "class": "section-statement",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "03 — The FOXX code" },
+    { "type": "inline_richtext", "id": "statement", "label": "Statement", "info": "Italic text is shown as outlined lettering.", "default": "Built for the ones who <em>outwork</em> the room." },
+    { "type": "richtext", "id": "text", "label": "Body text", "default": "<p>We design every piece around one question: will it hold up when you don't let up? Sharp cuts, technical fabrics and zero fluff, so you can focus on the work.</p>" },
+    { "type": "image_picker", "id": "image", "label": "Main image" },
+    { "type": "image_picker", "id": "image_2", "label": "Secondary image" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Our story" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "checkbox", "id": "show_mark", "label": "Show fox mark watermark", "default": true },
+    {
+      "type": "select", "id": "color_scheme", "label": "Background",
+      "options": [
+        { "value": "charcoal", "label": "Charcoal" },
+        { "value": "dark", "label": "Matte black" },
+        { "value": "light", "label": "Off-white" }
+      ],
+      "default": "charcoal"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat",
+      "settings": [
+        { "type": "text", "id": "value", "label": "Value", "default": "4-way" },
+        { "type": "text", "id": "label", "label": "Label", "default": "Stretch fabric" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand statement",
+      "blocks": [
+        { "type": "stat", "settings": { "value": "4-way", "label": "Stretch fabrics" } },
+        { "type": "stat", "settings": { "value": "50+", "label": "Wash durability tested" } },
+        { "type": "stat", "settings": { "value": "30d", "label": "Free returns" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

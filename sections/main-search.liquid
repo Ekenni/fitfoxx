@@ -1,0 +1,80 @@
+{%- liquid
+  assign form_id = 'SearchFacets-' | append: section.id
+  assign has_filters = false
+  if search.performed and search.filters.size > 0
+    assign has_filters = true
+  endif
+  assign encoded_terms = search.terms | url_encode
+  assign clear_url = routes.search_url | append: '?q=' | append: encoded_terms
+-%}
+<section class="search-page" {{ section.shopify_attributes }}>
+  <header class="collection-hero">
+    <div class="page-width collection-hero__inner">
+      <p class="eyebrow">{{ 'general.search.title' | t }}</p>
+      <h1 class="display collection-hero__title">{% if search.performed %}&ldquo;{{ search.terms | escape }}&rdquo;{% else %}{{ 'general.search.title' | t }}{% endif %}</h1>
+      <form action="{{ routes.search_url }}" method="get" role="search" class="search-page__form">
+        <label for="SearchPage-{{ section.id }}" class="visually-hidden">{{ 'general.search.placeholder' | t }}</label>
+        <input type="search" id="SearchPage-{{ section.id }}" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}">
+        <input type="hidden" name="options[prefix]" value="last">
+        <button type="submit" class="btn btn--primary">{{ 'general.search.submit' | t }}</button>
+      </form>
+    </div>
+  </header>
+
+  {%- if search.performed -%}
+    <div class="page-width">
+      {%- paginate search.results by 24 -%}
+        {%- render 'collection-toolbar', results: search, form_id: form_id, count: search.results_count, clear_url: clear_url, show_filter: has_filters -%}
+        <div class="collection-layout{% if has_filters %} collection-layout--filters{% endif %}">
+          {%- if has_filters -%}
+            <aside class="collection-layout__aside" data-facets-drawer>
+              <div class="facets-overlay" data-facets-close></div>
+              {%- render 'facets', results: search, url: routes.search_url, form_id: form_id, terms: search.terms -%}
+            </aside>
+          {%- else -%}
+            <form id="{{ form_id }}" action="{{ routes.search_url }}" method="get" hidden data-facets-form>
+              <input type="hidden" name="q" value="{{ search.terms | escape }}">
+              <input type="hidden" name="options[prefix]" value="last">
+            </form>
+          {%- endif -%}
+          <div class="collection-layout__main">
+            {%- if search.results_count > 0 -%}
+              <div class="product-grid" style="--cols: 4">
+                {%- for item in search.results -%}
+                  {%- case item.object_type -%}
+                    {%- when 'product' -%}
+                      {%- render 'product-card', product: item, index: forloop.index0 -%}
+                    {%- else -%}
+                      <article class="card card--text">
+                        <a href="{{ item.url }}" class="card__textlink">
+                          <span class="eyebrow">{{ item.object_type | capitalize }}</span>
+                          <h3 class="h4">{{ item.title }}</h3>
+                          <p>{{ item.content | strip_html | truncatewords: 18 }}</p>
+                          <span class="link-arrow">{{ 'general.read_more' | t }} {% render 'icon', icon: 'arrow' %}</span>
+                        </a>
+                      </article>
+                  {%- endcase -%}
+                {%- endfor -%}
+              </div>
+              {%- render 'pagination', paginate: paginate -%}
+            {%- else -%}
+              <div class="empty">
+                {%- render 'icon-fox', class: 'empty__mark' -%}
+                <h2 class="h3">{{ 'general.search.no_results' | t: terms: search.terms }}</h2>
+                <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary">{{ 'general.continue_shopping' | t }}</a>
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endpaginate -%}
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Search results",
+  "class": "section-main-search",
+  "settings": []
+}
+{% endschema %}

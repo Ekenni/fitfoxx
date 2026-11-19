@@ -1,0 +1,65 @@
+<section class="section benefits" {{ section.shopify_attributes }}>
+  <div class="page-width">
+    <div class="benefits__head">
+      {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      {%- if section.settings.heading != blank -%}<h2 class="h2 benefits__title">{{ section.settings.heading }}</h2>{%- endif -%}
+    </div>
+    <ul class="benefits__list" role="list">
+      {%- for block in section.blocks -%}
+        <li class="benefit reveal" style="--delay: {{ forloop.index0 | times: 90 }}ms" {{ block.shopify_attributes }}>
+          <div class="benefit__top">
+            <span class="benefit__icon">{% render 'icon', icon: block.settings.icon %}</span>
+            <span class="benefit__index">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+          </div>
+          <h3 class="benefit__title">{{ block.settings.title }}</h3>
+          {%- if block.settings.text != blank -%}<div class="benefit__text">{{ block.settings.text }}</div>{%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Brand benefits",
+  "class": "section-benefits",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "06 — Why FOXX" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Engineered for the grind" }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "settings": [
+        {
+          "type": "select", "id": "icon", "label": "Icon",
+          "options": [
+            { "value": "bolt", "label": "Performance" },
+            { "value": "feather", "label": "Comfort" },
+            { "value": "shield", "label": "Durability" },
+            { "value": "drop", "label": "Sweat-wicking" },
+            { "value": "stretch", "label": "Stretch" },
+            { "value": "truck", "label": "Shipping" },
+            { "value": "return", "label": "Returns" }
+          ],
+          "default": "bolt"
+        },
+        { "type": "text", "id": "title", "label": "Title", "default": "Performance" },
+        { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Sweat-wicking, quick-dry fabrics that keep you locked in from first rep to last.</p>" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand benefits",
+      "blocks": [
+        { "type": "benefit", "settings": { "icon": "bolt", "title": "Performance", "text": "<p>Sweat-wicking, quick-dry fabrics that keep you locked in from first rep to last.</p>" } },
+        { "type": "benefit", "settings": { "icon": "feather", "title": "Comfort", "text": "<p>Second-skin softness with four-way stretch. Move freely in every direction.</p>" } },
+        { "type": "benefit", "settings": { "icon": "shield", "title": "Durability", "text": "<p>Reinforced seams and pill-resistant knits built to survive hundreds of sessions.</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

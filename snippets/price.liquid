@@ -1,0 +1,37 @@
+{%- comment -%}
+  Accepts: product (product), variant (variant, optional), class (string, optional)
+{%- endcomment -%}
+{%- liquid
+  if variant
+    assign price = variant.price
+    assign compare_at = variant.compare_at_price
+    assign varies = false
+  else
+    assign price = product.price
+    assign compare_at = product.compare_at_price
+    assign varies = product.price_varies
+  endif
+  assign on_sale = false
+  if compare_at > price
+    assign on_sale = true
+  endif
+-%}
+<div class="price{% if on_sale %} price--sale{% endif %}{% if class %} {{ class }}{% endif %}" data-price-wrapper>
+  <span class="visually-hidden">{% if on_sale %}{{ 'products.product.sale_price' | t }}{% else %}{{ 'products.product.regular_price' | t }}{% endif %}</span>
+  <span class="price__current" data-price>
+    {%- if varies -%}
+      {%- assign price_formatted = price | money -%}
+      {{ 'products.product.price_from_html' | t: price: price_formatted }}
+    {%- else -%}
+      {{ price | money }}
+    {%- endif -%}
+  </span>
+  <s class="price__compare" data-compare-price{% unless on_sale %} hidden{% endunless %}>
+    {%- if on_sale %}{{ compare_at | money }}{% endif -%}
+  </s>
+  {%- if variant and variant.unit_price_measurement -%}
+    <small class="price__unit">
+      {{ variant.unit_price | money }}/{% if variant.unit_price_measurement.reference_value != 1 %}{{ variant.unit_price_measurement.reference_value }}{% endif %}{{ variant.unit_price_measurement.reference_unit }}
+    </small>
+  {%- endif -%}
+</div>

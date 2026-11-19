@@ -1,0 +1,19 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {}
+    },
+    "form": {
+      "type": "contact-form",
+      "settings": {
+        "heading": "Talk to the pack",
+        "text": "<p>Sizing questions, order help or collabs \u2014 drop us a line and we'll get back within 24 hours.</p>"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "form"
+  ]
+}

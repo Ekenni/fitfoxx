@@ -1,0 +1,11 @@
+{%- comment -%} Renders the uploaded logo or the default white FOXX wordmark. Accepts: width (number), class (string) {%- endcomment -%}
+{%- if settings.logo != blank -%}
+  {%- liquid
+    assign logo_w2 = width | times: 2
+    assign logo_h = settings.logo.height | times: width | divided_by: settings.logo.width
+  -%}
+  {{ settings.logo | image_url: width: logo_w2 | image_tag: class: class, alt: shop.name, width: width, height: logo_h, loading: 'eager' }}
+{%- else -%}
+  {%- render 'logo-wordmark', class: class, loading: 'eager' -%}
+  <span class="visually-hidden">{{ shop.name }}</span>
+{%- endif -%}

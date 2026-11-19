@@ -1,0 +1,49 @@
+{%- liquid
+  assign heading_font = settings.type_heading_font
+  assign body_font = settings.type_body_font
+  assign body_font_bold = body_font | font_modify: 'weight', 'bold'
+  assign body_font_medium = body_font | font_modify: 'weight', '500'
+  assign body_font_italic = body_font | font_modify: 'style', 'italic'
+-%}
+<style>
+  {{ heading_font | font_face: font_display: 'swap' }}
+  {{ body_font | font_face: font_display: 'swap' }}
+  {{ body_font_bold | font_face: font_display: 'swap' }}
+  {{ body_font_medium | font_face: font_display: 'swap' }}
+  {{ body_font_italic | font_face: font_display: 'swap' }}
+
+  :root {
+    --c-bg: {{ settings.color_background }};
+    --c-surface: {{ settings.color_surface }};
+    --c-surface-2: {{ settings.color_surface_alt }};
+    --c-text: {{ settings.color_text }};
+    --c-muted: {{ settings.color_text_muted }};
+    --c-light: {{ settings.color_light_background }};
+    --c-light-text: {{ settings.color_light_text }};
+    --c-accent: {{ settings.color_accent }};
+    --c-accent-text: {{ settings.color_accent_text }};
+    --c-border: {{ settings.color_text | color_modify: 'alpha', 0.12 }};
+    --c-border-strong: {{ settings.color_text | color_modify: 'alpha', 0.28 }};
+    --c-text-rgb: {{ settings.color_text | color_extract: 'red' }}, {{ settings.color_text | color_extract: 'green' }}, {{ settings.color_text | color_extract: 'blue' }};
+    --c-bg-rgb: {{ settings.color_background | color_extract: 'red' }}, {{ settings.color_background | color_extract: 'green' }}, {{ settings.color_background | color_extract: 'blue' }};
+
+    --font-heading: {{ heading_font.family }}, {{ heading_font.fallback_families }};
+    --font-heading-weight: {{ heading_font.weight }};
+    --font-heading-style: {{ heading_font.style }};
+    --font-body: {{ body_font.family }}, {{ body_font.fallback_families }};
+    --font-body-weight: {{ body_font.weight }};
+    --font-body-weight-bold: {% if body_font_bold %}{{ body_font_bold.weight }}{% else %}700{% endif %};
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+    --heading-scale: {{ settings.heading_scale | divided_by: 100.0 }};
+    --body-scale: {{ settings.body_scale | divided_by: 100.0 }};
+    --heading-tracking: {{ settings.heading_letter_spacing | divided_by: 1000.0 }}em;
+    --heading-transform: {% if settings.heading_uppercase %}uppercase{% else %}none{% endif %};
+
+    --page-width: {{ settings.page_width }}px;
+    --gutter: clamp(1rem, 3.5vw, 3rem);
+    --radius: {{ settings.corner_radius }}px;
+    --notch: {% if settings.button_notch %}10px{% else %}0px{% endif %};
+    --header-height: 72px;
+  }
+</style>

@@ -1,0 +1,15 @@
+{%- comment -%}
+  Non-clickable onboarding card shown when no collection is selected. Accepts: index (number)
+{%- endcomment -%}
+<div class="card card--placeholder reveal" aria-hidden="true">
+  <div class="card__media ratio ratio--{{ settings.card_image_ratio }}">
+    {%- render 'placeholder', label: 'Product image' -%}
+  </div>
+  <div class="card__info">
+    <div class="card__text">
+      <h3 class="card__title">{{ 'products.product.placeholder_title' | t }} {{ index | prepend: '0' | slice: -2, 2 }}</h3>
+      <p class="card__meta">{{ 'products.product.placeholder_meta' | t }}</p>
+    </div>
+    <div class="price card__price"><span class="price__current">{{ 6500 | money }}</span></div>
+  </div>
+</div>

@@ -1,0 +1,44 @@
+<section class="section account-page">
+  <div class="page-width">
+    <a href="{{ routes.account_url }}" class="link-arrow">{% render 'icon', icon: 'arrow', class: 'icon--flip' %} {{ 'customer.account.return' | t }}</a>
+    <h1 class="display account-page__title">{{ 'customer.order.title' | t: name: order.name }}</h1>
+    <p>{{ order.created_at | time_tag: format: 'date_at_time' }}</p>
+    {%- if order.cancelled -%}<p class="form-message form-message--error">{{ 'customer.order.cancelled' | t: date: order.cancelled_at }}</p>{%- endif -%}
+    <div class="table-wrap">
+      <table class="size-table">
+        <thead><tr><th>{{ 'general.cart.product' | t }}</th><th>{{ 'products.product.quantity' | t }}</th><th>{{ 'general.cart.total' | t }}</th></tr></thead>
+        <tbody>
+          {%- for line_item in order.line_items -%}
+            <tr>
+              <td>{{ line_item.title | link_to: line_item.product.url }}{% if line_item.fulfillment %}<br><small>{{ line_item.fulfillment.tracking_company }} {{ line_item.fulfillment.tracking_number }}</small>{% endif %}</td>
+              <td>{{ line_item.quantity }}</td>
+              <td>{{ line_item.final_line_price | money }}</td>
+            </tr>
+          {%- endfor -%}
+        </tbody>
+        <tfoot>
+          <tr><td colspan="2">{{ 'general.cart.subtotal' | t }}</td><td>{{ order.line_items_subtotal_price | money }}</td></tr>
+          {%- for shipping_method in order.shipping_methods -%}
+            <tr><td colspan="2">{{ shipping_method.title }}</td><td>{{ shipping_method.price | money }}</td></tr>
+          {%- endfor -%}
+          {%- for tax_line in order.tax_lines -%}
+            <tr><td colspan="2">{{ tax_line.title }} ({{ tax_line.rate_percentage }}%)</td><td>{{ tax_line.price | money }}</td></tr>
+          {%- endfor -%}
+          <tr><td colspan="2"><strong>{{ 'general.cart.total' | t }}</strong></td><td><strong>{{ order.total_price | money_with_currency }}</strong></td></tr>
+        </tfoot>
+      </table>
+    </div>
+    <div class="account-page__grid">
+      <div>
+        <h2 class="h4">{{ 'customer.order.billing' | t }}</h2>
+        <address class="account-page__address">{{ order.billing_address | format_address }}</address>
+      </div>
+      {%- if order.shipping_address -%}
+        <div>
+          <h2 class="h4">{{ 'customer.order.shipping' | t }}</h2>
+          <address class="account-page__address">{{ order.shipping_address | format_address }}</address>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>

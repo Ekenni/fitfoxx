@@ -1,0 +1,95 @@
+<section class="section categories" {{ section.shopify_attributes }}>
+  <div class="page-width">
+    <div class="section-head">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+        {%- if section.settings.heading != blank -%}<h2 class="h1 section-head__title">{{ section.settings.heading }}</h2>{%- endif -%}
+      </div>
+    </div>
+
+    <div class="categories__grid categories__grid--{{ section.blocks.size }}">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign c = block.settings.collection
+          if c == blank and block.settings.title != blank
+            assign auto_handle = block.settings.title | handle
+            assign auto_c = collections[auto_handle]
+            if auto_c.id != blank
+              assign c = auto_c
+            endif
+          endif
+          assign link = block.settings.link
+          if link == blank and c != blank
+            assign link = c.url
+          endif
+          if link == blank
+            assign link = routes.all_products_collection_url
+          endif
+          assign img = block.settings.image
+          if img == blank and c != blank and c.featured_image
+            assign img = c.featured_image
+          endif
+          assign title = block.settings.title
+          if title == blank and c != blank
+            assign title = c.title
+          endif
+        -%}
+        <a href="{{ link }}" class="category reveal" style="--delay: {{ forloop.index0 | times: 90 }}ms" {{ block.shopify_attributes }}>
+          <div class="category__media">
+            {%- if img != blank -%}
+              {{ img | image_url: width: 1400 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 40vw, 100vw', widths: '500, 800, 1100, 1400', class: 'category__img', alt: title }}
+            {%- else -%}
+              {%- if settings.use_sample_images -%}
+                {%- assign sample_index = forloop.index0 | modulo: 3 | plus: 1 -%}
+                {%- assign sample_name = 'foxx-category-' | append: sample_index | append: '.jpg' -%}
+                {%- render 'default-image', name: sample_name, width: 1200, height: 1800, class: 'category__img', alt: title -%}
+              {%- else -%}
+                {%- render 'placeholder', label: title -%}
+              {%- endif -%}
+            {%- endif -%}
+          </div>
+          <div class="category__body">
+            <span class="category__index">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+            <h3 class="category__title">{{ title }}</h3>
+            <span class="category__cta">{{ block.settings.cta | default: 'Shop' }} {% render 'icon', icon: 'arrow-up-right' %}</span>
+          </div>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured categories",
+  "class": "section-categories",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "01 — Shop by category" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Gear up" }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Collection", "info": "If empty, a collection whose handle matches the title (e.g. men) is used automatically." },
+        { "type": "text", "id": "title", "label": "Title", "info": "Defaults to the collection title" },
+        { "type": "image_picker", "id": "image", "label": "Image", "info": "Defaults to the collection image" },
+        { "type": "url", "id": "link", "label": "Custom link", "info": "Defaults to the collection" },
+        { "type": "text", "id": "cta", "label": "Link text", "default": "Shop now" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured categories",
+      "blocks": [
+        { "type": "category", "settings": { "title": "Men" } },
+        { "type": "category", "settings": { "title": "Women" } },
+        { "type": "category", "settings": { "title": "Accessories" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

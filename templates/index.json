@@ -1,0 +1,183 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "overlay_opacity": 40,
+        "height": "full",
+        "content_position": "bottom-left",
+        "show_grid": true,
+        "eyebrow": "New season / Apex Series",
+        "heading": "Unleash your <em>strength</em>",
+        "text": "<p>Engineered performance wear for heavy lifts, hard miles and everything between. Built to move. Made to last.</p>",
+        "button_label": "Shop now",
+        "button_label_2": "Explore collections",
+        "side_label": "FitFoxx Athletics \u2014 Performance division"
+      }
+    },
+    "categories": {
+      "type": "featured-categories",
+      "blocks": {
+        "cat-men": {
+          "type": "category",
+          "settings": {
+            "title": "Men",
+            "cta": "Shop men"
+          }
+        },
+        "cat-women": {
+          "type": "category",
+          "settings": {
+            "title": "Women",
+            "cta": "Shop women"
+          }
+        },
+        "cat-acc": {
+          "type": "category",
+          "settings": {
+            "title": "Accessories",
+            "cta": "Shop accessories"
+          }
+        }
+      },
+      "block_order": [
+        "cat-men",
+        "cat-women",
+        "cat-acc"
+      ],
+      "settings": {
+        "eyebrow": "01 \u2014 Shop by category",
+        "heading": "Gear up"
+      }
+    },
+    "best-sellers": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "02 \u2014 Most wanted",
+        "heading": "Best sellers",
+        "products_to_show": 8,
+        "columns": "4",
+        "layout": "grid",
+        "color_scheme": "dark",
+        "show_view_all": true,
+        "view_all_label": "Shop best sellers",
+        "auto_handle": "best-sellers",
+        "fallback_order": "default"
+      }
+    },
+    "statement": {
+      "type": "brand-statement",
+      "blocks": {
+        "stat-1": {
+          "type": "stat",
+          "settings": {
+            "value": "4-way",
+            "label": "Stretch fabrics"
+          }
+        },
+        "stat-2": {
+          "type": "stat",
+          "settings": {
+            "value": "50+",
+            "label": "Wash durability tested"
+          }
+        },
+        "stat-3": {
+          "type": "stat",
+          "settings": {
+            "value": "30d",
+            "label": "Free returns"
+          }
+        }
+      },
+      "block_order": [
+        "stat-1",
+        "stat-2",
+        "stat-3"
+      ],
+      "settings": {
+        "eyebrow": "03 \u2014 The FOXX code",
+        "statement": "Built for the ones who <em>outwork</em> the room.",
+        "text": "<p>We design every piece around one question: will it hold up when you don't let up? Sharp cuts, technical fabrics and zero fluff, so you can focus on the work.</p>",
+        "button_label": "Shop the collection",
+        "show_mark": true,
+        "color_scheme": "charcoal"
+      }
+    },
+    "new-arrivals": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "04 \u2014 Just landed",
+        "heading": "New arrivals",
+        "text": "<p>Fresh drops engineered for your next PR.</p>",
+        "products_to_show": 6,
+        "columns": "3",
+        "layout": "scroll",
+        "color_scheme": "dark",
+        "show_view_all": true,
+        "view_all_label": "Shop new arrivals",
+        "auto_handle": "new-arrivals",
+        "fallback_order": "newest"
+      }
+    },
+    "editorial": {
+      "type": "editorial-banner",
+      "settings": {
+        "tag_text": "Limited drop",
+        "eyebrow": "05 \u2014 Off-season sale",
+        "heading": "Train harder. Pay less.",
+        "text": "<p>Up to 30% off selected training essentials. While stock lasts.</p>",
+        "code": "FOXX30",
+        "button_label": "Shop the sale",
+        "align": "right"
+      }
+    },
+    "benefits": {
+      "type": "brand-benefits",
+      "blocks": {
+        "b-1": {
+          "type": "benefit",
+          "settings": {
+            "icon": "bolt",
+            "title": "Performance",
+            "text": "<p>Sweat-wicking, quick-dry fabrics that keep you locked in from first rep to last.</p>"
+          }
+        },
+        "b-2": {
+          "type": "benefit",
+          "settings": {
+            "icon": "feather",
+            "title": "Comfort",
+            "text": "<p>Second-skin softness with four-way stretch. Move freely in every direction.</p>"
+          }
+        },
+        "b-3": {
+          "type": "benefit",
+          "settings": {
+            "icon": "shield",
+            "title": "Durability",
+            "text": "<p>Reinforced seams and pill-resistant knits built to survive hundreds of sessions.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "b-1",
+        "b-2",
+        "b-3"
+      ],
+      "settings": {
+        "eyebrow": "06 \u2014 Why FOXX",
+        "heading": "Engineered for the grind"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "categories",
+    "best-sellers",
+    "statement",
+    "new-arrivals",
+    "editorial",
+    "benefits"
+  ]
+}
